@@ -40,8 +40,7 @@ class GradientBoostingRegressor:
             min_samples_split=2,
             loss="mse",
             subsample_size=1.0,
-            replace=True,
-            verbose=False,
+            replace=True
     ):
         self.trees_ = [DecisionTreeRegressor(max_depth=max_depth,
                                              min_samples_split=min_samples_split) for _ in range(n_estimators)]
