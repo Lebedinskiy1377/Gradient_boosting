@@ -79,6 +79,9 @@ class GradientBoostingRegressor:
         Returns:
             GradientBoostingRegressor: The fitted model.
         """
+        if isinstance(X, pd.DataFrame):
+            X = X.values
+
         self.base_pred_ = np.mean(y)
         y_pred = np.array([self.base_pred_] * len(X))
 
