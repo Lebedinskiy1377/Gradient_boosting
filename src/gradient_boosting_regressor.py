@@ -1,11 +1,9 @@
 from typing import Tuple
 
 import numpy as np
+import pandas as pd
 
 from sklearn.tree import DecisionTreeRegressor
-
-
-# from metrics import mse, mae
 
 
 def mse(y_true: np.ndarray, y_pred: np.ndarray) -> Tuple[float, np.ndarray]:
@@ -42,8 +40,7 @@ class GradientBoostingRegressor:
             min_samples_split=2,
             loss="mse",
             subsample_size=1.0,
-            replace=True,
-            verbose=False,
+            replace=True
     ):
         self.trees_ = [DecisionTreeRegressor(max_depth=max_depth,
                                              min_samples_split=min_samples_split) for _ in range(n_estimators)]
@@ -63,6 +60,8 @@ class GradientBoostingRegressor:
         return self.objective(y_true, y_pred)
 
     def _subsample(self, X, y):
+        if isinstance(X, pd.DataFrame):
+            X = X.values
         max_rows = X.shape[0]
         idx = np.random.choice(max_rows, size=round(self.subsample_size * max_rows), replace=self.replace)
         sub_X, sub_y = X[idx], y[idx]
@@ -79,6 +78,9 @@ class GradientBoostingRegressor:
         Returns:
             GradientBoostingRegressor: The fitted model.
         """
+        if isinstance(X, pd.DataFrame):
+            X = X.values
+
         self.base_pred_ = np.mean(y)
         y_pred = np.array([self.base_pred_] * len(X))
 
