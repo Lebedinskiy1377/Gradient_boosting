@@ -1,83 +1,53 @@
-Gradient Boosting
-A Python library implementing a custom gradient boosting regressor for regression tasks, supporting Mean Squared Error (MSE) and Mean Absolute Error (MAE) loss functions with decision trees as base learners.
-Features
+# Gradient Boosting from Scratch
 
-Custom Gradient Boosting: Implements gradient boosting with decision trees for regression tasks.
-Flexible Loss Functions: Supports MSE and MAE loss functions, with the option to use custom loss functions via callable objects.
-Stochastic Gradient Boosting: Includes subsampling of data for training efficiency, with configurable subsample size and replacement.
-Base Predictor: Provides a simple mean-based predictor as a baseline (base_estimator.py).
+A minimal implementation of **Gradient Boosting for Regression** using pure Python, NumPy, and `sklearn.tree.DecisionTreeRegressor`.  
+This project supports both **MSE** and **MAE** loss functions, as well as **stochastic gradient boosting** via subsampling.
 
-Tech Stack
+---
 
-Python 3.9+
-numpy
-pandas
-scikit-learn
+## Overview
 
-Installation
+This project implements classic gradient boosting:
 
-Clone the repository:git clone https://github.com/Lebedinskiy1377/Gradient_boosting.git
-cd Gradient_boosting
+- Ensemble of weak learners (decision trees)
+- Manual gradient computation for custom loss functions
+- Optional subsampling (stochastic gradient boosting)
+- sklearn-like interface: `fit()` and `predict()`
 
+---
 
-Install dependencies:pip install -r requirements.txt
+## Features
 
+- Loss functions: `MSE`, `MAE`, or custom callable
+- Base learner: `DecisionTreeRegressor`
+- Configurable hyperparameters:
+  - `n_estimators`
+  - `learning_rate`
+  - `max_depth`
+  - `min_samples_split`
+  - `subsample_size`
+  - `replace`
 
+---
 
-Usage
-Training a Gradient Boosting Regressor
-import numpy as np
+## Example usage
+
+```python
 from src.gradient_boosting_regressor import GradientBoostingRegressor
+from sklearn.datasets import make_regression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
 
-# Sample data
-X = np.random.rand(100, 5)  # 100 samples, 5 features
-y = np.random.rand(100)     # Target values
+# Sample regression dataset
+X, y = make_regression(n_samples=1000, n_features=10, noise=10, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-# Initialize and fit the model
+# Train custom Gradient Boosting model
 model = GradientBoostingRegressor(
-    n_estimators=100,
-    learning_rate=0.1,
-    max_depth=3,
-    min_samples_split=2,
-    loss="mse",
-    subsample_size=0.8,
-    replace=True
+    n_estimators=100, learning_rate=0.1, max_depth=3, loss="mse"
 )
-model.fit(X, y)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
 
-# Predict
-predictions = model.predict(X)
-print(predictions)
-
-Using the Base Predictor
-from src.base_estimator import GradientBoostingRegressor
-
-# Sample data
-X = np.random.rand(100, 5)
-y = np.random.rand(100)
-
-# Initialize and fit the base predictor
-base_model = GradientBoostingRegressor()
-base_model.fit(X, y)
-
-# Predict (returns mean of training targets)
-base_predictions = base_model.predict(X)
-print(base_predictions)
-
-Example Output
-For gradient boosting predictions:
-array([0.5123, 0.4987, 0.5342, ...])  # Predicted values
-
-For base predictor:
-array([0.5000, 0.5000, 0.5000, ...])  # Mean of training targets
-
-Requirements
-Install dependencies using:
-pip install numpy pandas scikit-learn
-
-Notes
-
-The GradientBoostingRegressor in gradient_boosting_regressor.py supports MSE and MAE loss functions, with gradients computed for optimization.
-The base_estimator.py provides a simple baseline predictor that returns the mean of the target values.
-Subsampling in GradientBoostingRegressor enables stochastic gradient boosting for improved training efficiency.
-The implementation is designed for regression tasks but can be extended for other applications by modifying the loss function.
+print("MSE:", mean_squared_error(y_test, y_pred))
+```
