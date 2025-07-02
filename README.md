@@ -71,14 +71,6 @@ array([0.5123, 0.4987, 0.5342, ...])  # Predicted values
 For base predictor:
 array([0.5000, 0.5000, 0.5000, ...])  # Mean of training targets
 
-Project Structure
-├── src/                        # Source code
-│   ├── base_estimator.py        # Base predictor (mean-based)
-│   ├── gradient_boosting_regressor.py # Custom gradient boosting regressor
-│   ├── metrics.py               # MSE and MAE loss functions
-├── requirements.txt             # Project dependencies
-└── README.md                   # Project documentation
-
 Requirements
 Install dependencies using:
 pip install numpy pandas scikit-learn
